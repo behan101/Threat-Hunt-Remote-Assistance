@@ -50,9 +50,8 @@ This report includes:
 
 - 📅 Timeline reconstruction of auditing, reconnaissance, and attempted exfiltration of data on the device **`gab-intern-vm`**
 - 📜 Detailed queries using Microsoft Defender Advanced Hunting (KQL)
-- 🧠 MITRE ATT&CK mapping to understand TTP alignment
+- 🎯 MITRE ATT&CK mapping to understand TTP alignment
 - 🧪 Evidence-based summaries supporting each flag and behavior discovered
-
 
 ---
 
@@ -136,13 +135,24 @@ Detect the earliest anomalous execution that could represent an entry point.
 -ExecutionPolicy
 
 **Detection Strategy:**
-In order to find the earliest anomalous execution, the query needed to be fine-tuned to look for suspicious Command Line Interface (CLI) parameters.
+In order to find the earliest anomalous execution, the query needed to be fine-tuned to look for suspicious Command Line Interface (CLI) parameters. The suspicious file was created at '2025-10-09T12:22:27.6514901Z' and named 'SupportTool.ps1'. Using this time frame to narrow down results, the DeviceProcessEvents query can be adjusted accordingly.
 
 **KQLQuery:**
 
 ```kql
+DeviceProcessEvents
+| where DeviceName == "gab-intern-vm"
+| where InitiatingProcessFileName =~ "powershell.exe"
+| where Timestamp between (datetime(2025-10-09T12:00:00Z) .. datetime(2025-10-09T12:30:00Z))
+| project Timestamp, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by Timestamp asc
 ```
+
 **Evidence:**
+<img width="1699" height="220" alt="image" src="https://github.com/user-attachments/assets/2ec6d32d-6ade-4e54-b420-435c7d793d16" />
+
+**Why This Matters:**
+The first Command Line Interface Process originating from the suspicious file within the Downloads directory can lead the investigation into new paths. Collection of evidence and signs of intent will be easier to find if the parent files and processes are known.
 
 ### 🚩 Flag 2: Defense Disabling
 **Objective:**
@@ -152,6 +162,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 3: Quick Data Probe
 **Objective:**
@@ -161,6 +172,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 4: Host Context Recon
 **Objective:**
@@ -170,6 +182,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 5: Storage Surface Mapping
 **Objective:**
@@ -179,6 +192,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 6: Connectivity & Name Resolution Check
 **Objective:**
@@ -188,6 +202,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 7: Interactive Session Discovery
 **Objective:**
@@ -197,6 +212,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 8: Runtime Application Inventory
 **Objective:**
@@ -206,6 +222,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 9: Privilege Surface Check
 **Objective:**
@@ -215,6 +232,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 10: Proof-of-Access & Egress Validation
 **Objective:**
@@ -224,6 +242,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 11: Bundling / Staging Artifacts
 **Objective:**
@@ -233,6 +252,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 12: Outbound Transfer Attempt (Simulated)
 **Objective:**
@@ -242,6 +262,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 13: Scheduled Re-Execution Persistence
 **Objective:**
@@ -251,6 +272,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 14: Autorun Fallback Persistence
 **Objective:**
@@ -260,6 +282,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ### 🚩 Flag 15: Planted Narrative / Cover Artifact
 **Objective:**
@@ -269,6 +292,7 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 ```kql
 ```
 **Evidence:**
+**Why This Matters:**
 
 ---
 
