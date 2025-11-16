@@ -6,7 +6,7 @@
 - [Threat Hunt: "Remote Assistance"](#-threat-hunt:-"remote-assistance")
 - [Platforms and Tools](#-platforms-and-tools)
 - [Summary of Findings (Flags)](#-summary-of-findings-flags)
-  - [Flag 0: Starting Point – Suspicious Processes Spawning in Downloads](#)
+  - [Flag 0: Starting Point – Suspicious Processes Spawning in Downloads](#flag-0-starting-point--suspicious-processes-spawning-in-downloads)
   - [Flag 1: Initial Execution Detection](#)
   - [Flag 2: Defense Disabling](#)
   - [Flag 3: Quick Data Probe](#)
