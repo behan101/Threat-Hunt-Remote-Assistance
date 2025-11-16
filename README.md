@@ -56,7 +56,7 @@ This report includes:
 
 ---
 
-## Platforms and Tools
+## 🧰 Platforms and Tools
 
 **Analysis Environment:**
 - Microsoft Defender for Endpoint
@@ -91,7 +91,7 @@ This report includes:
 | 15 | Planted Narrative / Cover Artifact |  |
 
 ---
-### Flag 0: Starting Point - Suspicious Processes Spawning in Downloads
+### 🚩 Flag 0: Starting Point - Suspicious Processes Spawning in Downloads
 
 **Objective:**
 Determine where to start hunting with the following intel:
@@ -127,7 +127,7 @@ The initial query showed suspicious files that were downloaded with the keywords
 **Why This Matters:**
 The query allowed us to narrow down the affected machines that may be responsible for the alert.
 
-### Flag 1: Initial Execution Detection
+### 🚩 Flag 1: Initial Execution Detection
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -136,7 +136,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 2: Defense Disabling
+### 🚩 Flag 2: Defense Disabling
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -145,7 +145,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 3: Quick Data Probe
+### 🚩 Flag 3: Quick Data Probe
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -154,7 +154,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 4: Host Context Recon
+### 🚩 Flag 4: Host Context Recon
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -163,7 +163,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 5: Storage Surface Mapping
+### 🚩 Flag 5: Storage Surface Mapping
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -172,7 +172,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 6: Connectivity & Name Resolution Check
+### 🚩 Flag 6: Connectivity & Name Resolution Check
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -181,7 +181,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 7: Interactive Session Discovery
+### 🚩 Flag 7: Interactive Session Discovery
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -190,7 +190,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 8: Runtime Application Inventory
+### 🚩 Flag 8: Runtime Application Inventory
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -199,7 +199,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 9: Privilege Surface Check
+### 🚩 Flag 9: Privilege Surface Check
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -208,7 +208,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 10: Proof-of-Access & Egress Validation
+### 🚩 Flag 10: Proof-of-Access & Egress Validation
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -217,7 +217,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 11: Bundling / Staging Artifacts
+### 🚩 Flag 11: Bundling / Staging Artifacts
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -226,7 +226,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 12: Outbound Transfer Attempt (Simulated)
+### 🚩 Flag 12: Outbound Transfer Attempt (Simulated)
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -235,7 +235,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 13: Scheduled Re-Execution Persistence
+### 🚩 Flag 13: Scheduled Re-Execution Persistence
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -244,7 +244,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 14: Autorun Fallback Persistence
+### 🚩 Flag 14: Autorun Fallback Persistence
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
@@ -253,7 +253,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```
 **Evidence:**
 
-### Flag 15: Planted Narrative / Cover Artifact
+### 🚩 Flag 15: Planted Narrative / Cover Artifact
 **Objective:**
 **Flag Value:**
 **Detection Strategy:**
