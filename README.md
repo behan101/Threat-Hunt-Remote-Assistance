@@ -128,10 +128,18 @@ The initial query showed suspicious files that were downloaded with the keywords
 The query allowed us to narrow down the affected machines that may be responsible for the alert.
 
 ### 🚩 Flag 1: Initial Execution Detection
+
 **Objective:**
+Detect the earliest anomalous execution that could represent an entry point.
+
 **Flag Value:**
+-ExecutionPolicy
+
 **Detection Strategy:**
+In order to find the earliest anomalous execution, the query needed to be fine-tuned to look for suspicious Command Line Interface (CLI) parameters.
+
 **KQLQuery:**
+
 ```kql
 ```
 **Evidence:**
@@ -261,4 +269,42 @@ The query allowed us to narrow down the affected machines that may be responsibl
 ```kql
 ```
 **Evidence:**
+
+---
+
+## 🎯 MITRE ATT&CK Technique Mapping
+
+| Flag | MITRE Technique                    | ID                                                          | Description                                                             |
+| ---- | ---------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 0    | PowerShell                         |                                                             |                                                                         |
+| 1    | Application Layer Protocol         |                                                             |                                                                         |
+| 2    | Registry Run Keys/Startup Folder   |                                                             |                                                                         |
+| 3    | Scheduled Task/Job                 |                                                             |                                                                         |
+| 4    | Obfuscated Files or Information    |                                                             |                                                                         |
+| 5    | Indicator Removal on Host          |                                                             |                                                                         |
+| 6    | Remote Services: Scheduled Task    |                                                             |                                                                         |
+| 7    | Lateral Tool Transfer              |                                                             |                                                                         |
+| 8    | Registry Modification              |                                                             |                                                                         |
+| 9    | Application Layer Protocol         |                                                             |                                                                         |
+| 10   | WMI Event Subscription             |                                                             |                                                                         |
+| 11   | Credential Dumping Simulation      |                                                             |                                                                         |
+| 12   | Data Staged: Local                 |                                                             |                                                                         |
+| 13   | Data from Information Repositories |                                                             |                                                                         |
+| 14   | Archive Collected Data             |                                                             |                                                                         |
+| 15   | Ingress Tool Transfer              |                                                             |                                                                         |
+
+---
+
+## 🧾 Conclusion
+
+
+---
+
+## 🎓 Lessons Learned
+
+
+---
+
+## 🛠️ Recommendations for Remediation
+
 
