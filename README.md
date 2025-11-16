@@ -3,7 +3,7 @@
 
 # 📚 Table of Contents
 
-- [Threat Hunt: "Remote Assistance"](##-🕵️‍♂️-threat-hunt-remote-assistance)
+- [Threat Hunt: "Remote Assistance"](#🕵️‍♂️-threat-hunt:-*"remote-assistance")
 - [Platforms and Tools](#-platforms-and-tools)
 - [Summary of Findings (Flags)](#-summary-of-findings-flags)
   - [Flag 0: Starting Point – Suspicious Processes Spawning in Downloads](#)
