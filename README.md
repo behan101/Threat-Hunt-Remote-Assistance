@@ -124,4 +124,141 @@ DeviceFileEvents
 
 The initial query showed suspicious files that were downloaded with the keywords in the alert. The affected device was identified as `gab-intern-vm`.
 
+**Why This Matters:**
+The query allowed us to narrow down the affected machines that may be responsible for the alert.
+
 ### Flag 1: Initial Execution Detection
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 2: Defense Disabling
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 3: Quick Data Probe
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 4: Host Context Recon
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 5: Storage Surface Mapping
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 6: Connectivity & Name Resolution Check
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 7: Interactive Session Discovery
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 8: Runtime Application Inventory
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 9: Privilege Surface Check
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 10: Proof-of-Access & Egress Validation
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 11: Bundling / Staging Artifacts
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 12: Outbound Transfer Attempt (Simulated)
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 13: Scheduled Re-Execution Persistence
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 14: Autorun Fallback Persistence
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
+### Flag 15: Planted Narrative / Cover Artifact
+**Objective:**
+**Flag Value:**
+**Detection Strategy:**
+**KQLQuery:**
+```kql
+```
+**Evidence:**
+
