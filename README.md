@@ -1,4 +1,5 @@
-<img width="1200" height="725" alt="Remote Threat" src="https://drive.google.com/file/d/1skzeaDsuKP_yyBES-14g6SDBIiiDex-F/view?usp=sharing" />
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/bf6d8a1e-255c-40b8-ba72-784f0651a8f4" />
+
 
 # 📚 Table of Contents
 
@@ -72,21 +73,22 @@ This report includes:
 
 | Flag | Objective Description | Finding |
 |------|------------------------|---------|
-| 1 | Flag 0: Starting Point – Suspicious Processes Spawning in Downloads | `gab-intern-vm` was the first targeted machine |
-| 2 | Initial Execution Detection | Timestamp: `` |
-| 3 | Quick Data Probe | RemoteURL: `` |
-| 4 | Host Context Recon | TaskName: `` |
-| 5 | Storage Surface Mapping | Registry Key: `` |
-| 6 | Connectivity & Name Resolution Check | `` |
-| 7 | Interactive Session Discovery | `` |
-| 8 | Runtime Application Inventory | Next device: `` |
-| 9 | Privilege Surface Check | File: `` |
-| 10 | Proof-of-Access & Egress Validation | Registry value referencing: `` |
-| 11 | Bundling / Staging Artifacts | RemoteURL: `` |
-| 12 | Outbound Transfer Attempt (Simulated) | Script: `` |
-| 13 | Scheduled Re-Execution Persistence | File: `` |
-| 14 | Autorun Fallback Persistence | File: `` |
-| 15 | Planted Narrative / Cover Artifact | Archive: `` |
+| 0 | Starting Point – Suspicious Processes Spawning in Downloads | `gab-intern-vm` was the first targeted machine |
+| 1 | Initial Execution Detection |  |
+| 2 | Defense Disabling |  |
+| 3 | Quick Data Probe |   |
+| 4 | Host Context Recon |   |
+| 5 | Storage Surface Mapping |  |
+| 6 | Connectivity & Name Resolution Check |  |
+| 7 | Interactive Session Discovery |  |
+| 8 | Runtime Application Inventory |  |
+| 9 | Privilege Surface Check |  |
+| 10 | Proof-of-Access & Egress Validation |  |
+| 11 | Bundling / Staging Artifacts |  |
+| 12 | Outbound Transfer Attempt (Simulated) |  |
+| 13 | Scheduled Re-Execution Persistence |  |
+| 14 | Autorun Fallback Persistence |  |
+| 15 | Planted Narrative / Cover Artifact |  |
 
 ---
 ### Flag 0: Starting Point - Suspicious Processes Spawning in Downloads
@@ -104,3 +106,22 @@ and other traits.
 `gab-intern-vm`
 
 **Detection Strategy:**
+Multiple alerts were issued indicating that multiple machines were spawning processes originating from the 'download' folders around the first half of October (10/01/2025 - 10/15/2025). Common keywords among the discovered files included "desk", "help", "support", and "tool". The following query was used in Microsoft Defender to find any files associated with the keywords:
+
+**KQLQuery:**
+```kql
+DeviceFileEvents
+| where ActionType == "FileCreated"
+| where Timestamp between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where FileName matches regex @"(?i)(desk|help|support|tool)"
+| where FolderPath has @"\Downloads\"
+| project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine, SHA1, InitiatingProcessAccountName
+| order by Timestamp desc
+```
+**Evidence:**
+
+<img width="1902" height="359" alt="image" src="https://github.com/user-attachments/assets/12e8effd-bd58-40e4-9d45-8d1fc05ac0db" />
+
+The initial query showed suspicious files that were downloaded with the keywords in the alert. The affected device was identified as `gab-intern-vm`.
+
+### Flag 1: Initial Execution Detection
