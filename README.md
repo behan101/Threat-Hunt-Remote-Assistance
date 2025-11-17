@@ -243,6 +243,7 @@ DeviceProcessEvents
 <img width="1266" height="251" alt="image" src="https://github.com/user-attachments/assets/8dbc8e44-3926-4959-940f-deb8e14ae564" />
 
 **Why This Matters:**
+Attempts that try to identify information about the host can be observed as reconnaissance and treated collected as evidence. The attacker has shown interest in discovering information about the host which can lead to attempts are understanding the scope or attack surface.
 
 ---
 
