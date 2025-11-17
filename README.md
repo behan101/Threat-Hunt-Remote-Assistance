@@ -73,9 +73,9 @@ This report includes:
 | Flag | Objective Description | Finding | TimeStamp |
 |------|------------------------|---------|-----------|
 | 0 | Starting Point – Suspicious Processes Spawning in Downloads | `gab-intern-vm` was the first targeted machine | 2025-10-09T12:22:27.6514901Z |
-| 1 | Initial Execution Detection | '-ExecutionPolicy' was the earliest anomalous execution | 2025-10-09T12:22:27.6514901Z |
-| 2 | Defense Disabling | 'DefenderTamperArtifact.lnk' was created in relation to the exploit | 2025-10-09T12:34:59.1260624Z |
-| 3 | Quick Data Probe | "powershell.exe" -NoProfile -Sta -Command "try { Get-Clipboard | Out-Null } catch { }"  |  |
+| 1 | Initial Execution Detection | `-ExecutionPolicy` was the earliest anomalous execution | 2025-10-09T12:22:27.6514901Z |
+| 2 | Defense Disabling | `DefenderTamperArtifact.lnk` was created in relation to the exploit | 2025-10-09T12:34:59.1260624Z |
+| 3 | Quick Data Probe | `"powershell.exe" -NoProfile -Sta -Command` contained a `Get-Clipboard` to attempt to collect transient info  | 2025-10-09T12:50:39.955931Z |
 | 4 | Host Context Recon |  |  |
 | 5 | Storage Surface Mapping |  |  |
 | 6 | Connectivity & Name Resolution Check |  |  |
