@@ -7,7 +7,7 @@
 - [Platforms and Tools](#-platforms-and-tools)
 - [Summary of Findings (Flags)](#-summary-of-findings-flags)
   - [Flag 0: Starting Point – Suspicious Processes Spawning in Downloads](#-flag-0-starting-point---suspicious-processes-spawning-in-downloads)
-  - [Flag 1: Initial Execution Detection]([#-flag-1-initial-execution-detection)
+  - [Flag 1: Initial Execution Detection](#-flag-1-initial-execution-detection)
   - [Flag 2: Defense Disabling](#-flag-2-defense-disabling)
   - [Flag 3: Quick Data Probe](#-flag-3-quick-data-probe)
   - [Flag 4: Host Context Recon](#-flag-4-host-context-recon)
