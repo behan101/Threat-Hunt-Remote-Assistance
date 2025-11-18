@@ -401,22 +401,22 @@ In this instance, a query for the disk name, available space, and total volume s
 
 | Flag | MITRE Technique                    | ID                                                          | Description                                                             |
 | ---- | ---------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
-| 0    | PowerShell                         |                                                             |                                                                         |
-| 1    | Application Layer Protocol         |                                                             |                                                                         |
-| 2    | Registry Run Keys/Startup Folder   |                                                             |                                                                         |
-| 3    | Scheduled Task/Job                 |                                                             |                                                                         |
-| 4    | Obfuscated Files or Information    |                                                             |                                                                         |
-| 5    | Indicator Removal on Host          |                                                             |                                                                         |
-| 6    | Remote Services: Scheduled Task    |                                                             |                                                                         |
-| 7    | Lateral Tool Transfer              |                                                             |                                                                         |
-| 8    | Registry Modification              |                                                             |                                                                         |
-| 9    | Application Layer Protocol         |                                                             |                                                                         |
-| 10   | WMI Event Subscription             |                                                             |                                                                         |
-| 11   | Credential Dumping Simulation      |                                                             |                                                                         |
-| 12   | Data Staged: Local                 |                                                             |                                                                         |
-| 13   | Data from Information Repositories |                                                             |                                                                         |
-| 14   | Archive Collected Data             |                                                             |                                                                         |
-| 15   | Ingress Tool Transfer              |                                                             |                                                                         |
+| 0    |                                    |                                                             |                                                                         |
+| 1    |                                    |                                                             |                                                                         |
+| 2    |                                    |                                                             |                                                                         |
+| 3    |                                    |                                                             |                                                                         |
+| 4    |                                    |                                                             |                                                                         |
+| 5    |                                    |                                                             |                                                                         |
+| 6    |                                    |                                                             |                                                                         |
+| 7    |                                    |                                                             |                                                                         |
+| 8    |                                    |                                                             |                                                                         |
+| 9    |                                    |                                                             |                                                                         |
+| 10   |                                    |                                                             |                                                                         |
+| 11   |                                    |                                                             |                                                                         |
+| 12   |                                    |                                                             |                                                                         |
+| 13   |                                    |                                                             |                                                                         |
+| 14   |                                    |                                                             |                                                                         |
+| 15   |                                    |                                                             |                                                                         |
 
 ---
 
