@@ -77,8 +77,8 @@ This report includes:
 | 2 | Defense Disabling | `DefenderTamperArtifact.lnk` was created in relation to the exploit | 2025-10-09T12:34:59.1260624Z |
 | 3 | Quick Data Probe | `"powershell.exe" -NoProfile -Sta -Command` contained a `Get-Clipboard` to attempt to collect transient info  | 2025-10-09T12:50:39.955931Z |
 | 4 | Host Context Recon | At `2025-10-09T12:51:44.3425653Z` the Processs Command Line `qwinsta.exe` was executed | 2025-10-09T12:51:44.3425653Z |
-| 5 | Storage Surface Mapping | `"cmd.exe" /c wmic logicaldisk get name,freespace,size` query is indicative of storage surface mapping | 2025-10-09T12:51:18.3848072Z |
-| 6 | Connectivity & Name Resolution Check |  |  |
+| 5 | Storage Surface Mapping | `"cmd.exe" /c wmic logicaldisk get name,freespace,size` query was indicative of storage surface mapping | 2025-10-09T12:51:18.3848072Z |
+| 6 | Connectivity & Name Resolution Check | `RuntimeBroker.exe` was the initiating parent process for DNS queries | `2025-10-09T12:51:44.3081129Z` |
 | 7 | Interactive Session Discovery |  |  |
 | 8 | Runtime Application Inventory |  |  |
 | 9 | Privilege Surface Check |  |  |
@@ -205,7 +205,7 @@ Attackers often look for low effort wins first. Quick probes such as these can o
 **KQLQuery:**
 ```kql
 DeviceProcessEvents
-| where Timestamp between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
 | where ProcessCommandLine has_any ("clip.exe","Get-Clipboard","Set-Clipboard","Out-Clipboard"," | clip")
 | summarize count() by ProcessCommandLine, DeviceName, InitiatingProcessFileName
 ```
@@ -232,7 +232,7 @@ Activity related to queries for context and reconnaissance shape attack decision
 **KQLQuery:**
 ```kql
 DeviceProcessEvents
-| where Timestamp between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
 | where ProcessCommandLine has_any ("whoami", "hostname", "systeminfo", "ipconfig", "ipconfig /all", "net user", "net localgroup", "query user", "quser", "qwinsta", "wmic", "Get-ComputerInfo", "Get-CimInstance",
  "Get-WmiObject", "Get-NetIPConfiguration", "Get-NetAdapter", "Get-NetIPAddress", "Get-Process", "tasklist", "netstat -ano", "reg query", "Get-Service", "Get-LocalUser", "Get-ChildItem Env:")
@@ -278,14 +278,33 @@ In this instance, a query for the disk name, available space, and total volume s
 ---
 
 ### 🚩 Flag 6: Connectivity & Name Resolution Check
+
 **Objective:**
+Identify checks that validate network reachability and name resolution.
+
 **Flag Value:**
+`RuntimeBroker.exe`
+`2025-10-09T12:51:44.3081129Z`
+
 **Detection Strategy:**
+Network or process events indicating DNS or interface queries and simple outward connectivity probes.
+
 **KQLQuery:**
 ```kql
+union isfuzzy=true 
+DeviceProcessEvents, DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ("ping", "nslookup", "Test-NetConnection", "Resolve-DnsName", "Get-NetIPConfiguration", "session")
+      or RemoteUrl has_any ("dns", "lookup", "session")
+| project TimeGenerated, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessParentFileName, ActionType
+| order by TimeGenerated asc
 ```
 **Evidence:**
+<img width="1858" height="321" alt="image" src="https://github.com/user-attachments/assets/d5f40d59-3753-4a08-9c81-974c8939d5b6" />
+
 **Why This Matters:**
+Confirmation of egress is a necessity before any attempts to move data off-hose. After establishing a connection, exfiltrated data can be transferred. "RuntimeBroker.exe" was found to to be the initiating parent process for the queries.
 
 ---
 
