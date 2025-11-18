@@ -72,12 +72,12 @@ This report includes:
 
 | Flag | Objective Description | Finding | TimeStamp |
 |------|------------------------|---------|-----------|
-| 0 | Starting Point – Suspicious Processes Spawning in Downloads | `gab-intern-vm` was the first targeted machine | 2025-10-09T12:22:27.6514901Z |
-| 1 | Initial Execution Detection | `-ExecutionPolicy` was the earliest anomalous execution | 2025-10-09T12:22:27.6514901Z |
-| 2 | Defense Disabling | `DefenderTamperArtifact.lnk` was created in relation to the exploit | 2025-10-09T12:34:59.1260624Z |
-| 3 | Quick Data Probe | `"powershell.exe" -NoProfile -Sta -Command` contained a `Get-Clipboard` to attempt to collect transient info  | 2025-10-09T12:50:39.955931Z |
-| 4 | Host Context Recon | At `2025-10-09T12:51:44.3425653Z` the Processs Command Line `qwinsta.exe` was executed | 2025-10-09T12:51:44.3425653Z |
-| 5 | Storage Surface Mapping | `"cmd.exe" /c wmic logicaldisk get name,freespace,size` query was indicative of storage surface mapping | 2025-10-09T12:51:18.3848072Z |
+| 0 | Starting Point – Suspicious Processes Spawning in Downloads | `gab-intern-vm` was the first targeted machine | `2025-10-09T12:22:27.6514901Z` |
+| 1 | Initial Execution Detection | `-ExecutionPolicy` was the earliest anomalous execution | `2025-10-09T12:22:27.6514901Z` |
+| 2 | Defense Disabling | `DefenderTamperArtifact.lnk` was created in relation to the exploit | `2025-10-09T12:34:59.1260624Z` |
+| 3 | Quick Data Probe | `"powershell.exe" -NoProfile -Sta -Command` contained a `Get-Clipboard` to attempt to collect transient info  | `2025-10-09T12:50:39.955931Z` |
+| 4 | Host Context Recon | At `2025-10-09T12:51:44.3425653Z` the Processs Command Line `qwinsta.exe` was executed | `2025-10-09T12:51:44.3425653Z` |
+| 5 | Storage Surface Mapping | `"cmd.exe" /c wmic logicaldisk get name,freespace,size` query was indicative of storage surface mapping | `2025-10-09T12:51:18.3848072Z` |
 | 6 | Connectivity & Name Resolution Check | `RuntimeBroker.exe` was the initiating parent process for DNS queries | `2025-10-09T12:51:44.3081129Z` |
 | 7 | Interactive Session Discovery | The unique ID of the initiating process was found to be `2533274790397065 ` | `2025-10-09T12:51:44.3081129Z` |
 | 8 | Runtime Application Inventory | `tasklist.exe` was the filename of the runtime process enumeration event on the target host | `2025-10-09T12:51:57.6866149Z` |
