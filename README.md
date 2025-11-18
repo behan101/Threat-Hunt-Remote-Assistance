@@ -77,7 +77,7 @@ This report includes:
 | 2 | Defense Disabling | `DefenderTamperArtifact.lnk` was created in relation to the exploit | 2025-10-09T12:34:59.1260624Z |
 | 3 | Quick Data Probe | `"powershell.exe" -NoProfile -Sta -Command` contained a `Get-Clipboard` to attempt to collect transient info  | 2025-10-09T12:50:39.955931Z |
 | 4 | Host Context Recon | At `2025-10-09T12:51:44.3425653Z` the Processs Command Line `qwinsta.exe` was executed | 2025-10-09T12:51:44.3425653Z |
-| 5 | Storage Surface Mapping |  |  |
+| 5 | Storage Surface Mapping | `"cmd.exe" /c wmic logicaldisk get name,freespace,size` query is indicative of storage surface mapping | 2025-10-09T12:51:18.3848072Z |
 | 6 | Connectivity & Name Resolution Check |  |  |
 | 7 | Interactive Session Discovery |  |  |
 | 8 | Runtime Application Inventory |  |  |
@@ -135,7 +135,7 @@ The query allowed us to narrow down the affected machines that may be responsibl
 Detect the earliest anomalous execution that could represent an entry point.
 
 **Flag Value:**
--ExecutionPolicy
+`-ExecutionPolicy`
 2025-10-09T12:22:27.6514901Z
 
 **Detection Strategy:**
@@ -166,7 +166,7 @@ The first Command Line Interface Process originating from the suspicious file wi
 Identify indicators that suggest attempts to imply or simulate changing security posture.
 
 **Flag Value:**
-DefenderTamperArtifact.lnk
+`DefenderTamperArtifact.lnk`
 2025-10-09T12:34:59.1260624Z
 
 **Detection Strategy:**
@@ -196,7 +196,7 @@ An artifact creation or short-lived process that contains tamper-related content
 Spot brief, opportunistic checks for readily available sensitive content.
 
 **Flag Value:**
-"powershell.exe" -NoProfile -Sta -Command "try { Get-Clipboard | Out-Null } catch { }"
+`"powershell.exe" -NoProfile -Sta -Command "try { Get-Clipboard | Out-Null } catch { }"`
 2025-10-09T12:50:39.955931Z
 
 **Detection Strategy:**
@@ -224,7 +224,7 @@ The attempts at probing for readily available sensitive content such as the "cli
 Find activity that gathers basic host and user context to inform follow-up actions.
 
 **Flag Value:**
-2025-10-09T12:51:44.3425653Z
+`2025-10-09T12:51:44.3425653Z`
 
 **Detection Strategy:**
 Activity related to queries for context and reconnaissance shape attack decisions such as "who", "what", and "where" to target objectives. By looking for Proccess Command Line inputs for typical host recon commands such as "whoami", "systeminfo", "ipconfig", "query user", "quser", "qwinsta", etc, the proof for recon can be obtained.
@@ -248,14 +248,32 @@ Attempts that try to identify information about the host can be observed as reco
 ---
 
 ### 🚩 Flag 5: Storage Surface Mapping
+
 **Objective:**
+Detect discovery of local or network storage locations that might hold interesting data.
+
 **Flag Value:**
+`"cmd.exe" /c wmic logicaldisk get name,freespace,size`
+2025-10-09T12:51:18.3848072Z
+
 **Detection Strategy:**
+Any enumeration of filesystem, share surfaces, and lightweight checks of available storaged would indicate attempts for storage surface mapping. Searching for any ProcessCommandLine and quick "read-only" commands such as "net view", "dir", "Get-PSDrive", "wmic logicaldisk" with connections to network share queries like "net view \\HOST” or “Get-SmbShare" would show explicit network share discovery.
+
 **KQLQuery:**
 ```kql
+DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ( "Get-ChildItem","Get-PSDrive","Get-Volume","Get-SmbShare","Get-SmbMapping", "net view","net share","net use","dir ","wmic logicaldisk","fsutil volume diskfree", "mountvol","robocopy /L")
+| order by DeviceName asc, Timestamp asc
+| project DeviceName, Timestamp, FileName, ProcessCommandLine, InitiatingProcessFileName, AccountName
 ```
+
 **Evidence:**
+<img width="1378" height="279" alt="image" src="https://github.com/user-attachments/assets/bcdf7a3b-4d3b-45dd-9d9e-51dd9e5bfb16" />
+
 **Why This Matters:**
+In this instance, a query for the disk name, available space, and total volume size shows intent to assess the storage information on the host device which further supports intent for surface mapping.
 
 ---
 
