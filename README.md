@@ -82,7 +82,7 @@ This report includes:
 | 7 | Interactive Session Discovery | The unique ID of the initiating process was found to be `2533274790397065 ` | `2025-10-09T12:51:44.3081129Z` |
 | 8 | Runtime Application Inventory | `tasklist.exe` was the filename of the runtime process enumeration event on the target host | `2025-10-09T12:51:57.6866149Z` |
 | 9 | Privilege Surface Check | The first use of CLI commands for discovery was at `2025-10-09T12:52:14.3135459Z` | `2025-10-09T12:52:14.3135459Z` |
-| 10 | Proof-of-Access & Egress Validation |  |  |
+| 10 | Proof-of-Access & Egress Validation | `www.msftconnecttest.com` was the first suspicious outbound destination | `2025-10-09T12:55:15.736717Z` |
 | 11 | Bundling / Staging Artifacts |  |  |
 | 12 | Outbound Transfer Attempt (Simulated) |  |  |
 | 13 | Scheduled Re-Execution Persistence |  |  |
@@ -400,19 +400,31 @@ Priviledge mapping informs whether the actor proceeds as a user or seeks evaluat
 ### 🚩 Flag 10: Proof-of-Access & Egress Validation
 
 **Objective:**
+Find actions that both validate outbound reachability and attempt to capture host state for exfiltration value.
 
 **Flag Value:**
+`www.msftconnecttest.com`
+`2025-10-09T12:55:15.736717Z`
 
 **Detection Strategy:**
+Look for combined evidence of outbound network checks and artifacts created as proof the actor can view or collect host data. Using the timeframe of first execution as the starting point of the query and the remainder of the day as the end, searching for any network events that has both outbound and host queries will narrow down the results. Using the results, the suspicious outbound destinations can be noted.
 
 **KQLQuery:**
 ```kql
+let VMName = "gab-intern-vm";
+DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-10-09T12:22:27.6514901Z) .. datetime(2025-10-10))
+| where DeviceName == VMName
+| where AdditionalFields has_all ("Out", "host")
+| project TimeGenerated, ActionType, AdditionalFields, InitiatingProcessAccountName, InitiatingProcessCommandLine, InitiatingProcessFolderPath,LocalIPType, RemoteIP, Timestamp
+| order by Timestamp asc
 ```
 
 **Evidence:**
+<img width="2080" height="212" alt="image" src="https://github.com/user-attachments/assets/12824336-1ca0-4b4b-ab1b-007c02dfebc1" />
 
 **Why This Matters:**
-
+The outbound destination `www.msftconnecttest.com` was contacted first. This step demonstrates both access and the potential to move meaningful data off the host.
 
 ---
 
