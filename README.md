@@ -79,9 +79,9 @@ This report includes:
 | 4 | Host Context Recon | At `2025-10-09T12:51:44.3425653Z` the Processs Command Line `qwinsta.exe` was executed | 2025-10-09T12:51:44.3425653Z |
 | 5 | Storage Surface Mapping | `"cmd.exe" /c wmic logicaldisk get name,freespace,size` query was indicative of storage surface mapping | 2025-10-09T12:51:18.3848072Z |
 | 6 | Connectivity & Name Resolution Check | `RuntimeBroker.exe` was the initiating parent process for DNS queries | `2025-10-09T12:51:44.3081129Z` |
-| 7 | Interactive Session Discovery |  |  |
-| 8 | Runtime Application Inventory |  |  |
-| 9 | Privilege Surface Check |  |  |
+| 7 | Interactive Session Discovery | The unique ID of the initiating process was found to be `2533274790397065 ` | `2025-10-09T12:51:44.3081129Z` |
+| 8 | Runtime Application Inventory | `tasklist.exe` was the filename of the runtime process enumeration event on the target host | `2025-10-09T12:51:57.6866149Z` |
+| 9 | Privilege Surface Check | The first use of CLI commands for discovery was at `2025-10-09T12:52:14.3135459Z` | `2025-10-09T12:52:14.3135459Z` |
 | 10 | Proof-of-Access & Egress Validation |  |  |
 | 11 | Bundling / Staging Artifacts |  |  |
 | 12 | Outbound Transfer Attempt (Simulated) |  |  |
@@ -112,11 +112,11 @@ Multiple alerts were issued indicating that multiple machines were spawning proc
 ```kql
 DeviceFileEvents
 | where ActionType == "FileCreated"
-| where Timestamp between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
 | where FileName matches regex @"(?i)(desk|help|support|tool)"
 | where FolderPath has @"\Downloads\"
-| project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine, SHA1, InitiatingProcessAccountName
-| order by Timestamp desc
+| project TimeGenerated, DeviceName, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine, SHA1, InitiatingProcessAccountName
+| order by TimeGenerated desc
 ```
 **Evidence:**
 
@@ -147,9 +147,9 @@ In order to find the earliest anomalous execution, the query needed to be fine-t
 DeviceProcessEvents
 | where DeviceName == "gab-intern-vm"
 | where InitiatingProcessFileName =~ "powershell.exe"
-| where Timestamp between (datetime(2025-10-09T12:00:00Z) .. datetime(2025-10-09T12:30:00Z))
-| project Timestamp, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
-| order by Timestamp asc
+| where TimeGenerated between (datetime(2025-10-09T12:00:00Z) .. datetime(2025-10-09T12:30:00Z))
+| project TimeGenerated, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc
 ```
 
 **Evidence:**
@@ -176,10 +176,10 @@ The previous results gave a timeframe of when the initial process was executed. 
 
 ```kql
 DeviceFileEvents
-| where Timestamp between (datetime('2025-10-09T12:22:27.6588913Z') .. datetime(2025-10-10))
+| where TimeGenerated between (datetime('2025-10-09T12:22:27.6588913Z') .. datetime(2025-10-10))
 | where DeviceName == "gab-intern-vm"
 | where ActionType in ("FileCreated","FileModified","FileCopied")
-| order by Timestamp asc
+| order by TimeGenerated asc
 ```
 
 **Evidence:**
@@ -236,8 +236,8 @@ DeviceProcessEvents
 | where DeviceName == "gab-intern-vm"
 | where ProcessCommandLine has_any ("whoami", "hostname", "systeminfo", "ipconfig", "ipconfig /all", "net user", "net localgroup", "query user", "quser", "qwinsta", "wmic", "Get-ComputerInfo", "Get-CimInstance",
  "Get-WmiObject", "Get-NetIPConfiguration", "Get-NetAdapter", "Get-NetIPAddress", "Get-Process", "tasklist", "netstat -ano", "reg query", "Get-Service", "Get-LocalUser", "Get-ChildItem Env:")
-| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, AccountName
-| order by Timestamp desc
+| project TimeGenerated, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, AccountName
+| order by TimeGenerated desc
 ```
 **Evidence:**
 <img width="1266" height="251" alt="image" src="https://github.com/user-attachments/assets/8dbc8e44-3926-4959-940f-deb8e14ae564" />
@@ -265,8 +265,8 @@ DeviceProcessEvents
 | where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
 | where ProcessCommandLine has_any ( "Get-ChildItem","Get-PSDrive","Get-Volume","Get-SmbShare","Get-SmbMapping", "net view","net share","net use","dir ","wmic logicaldisk","fsutil volume diskfree", "mountvol","robocopy /L")
-| order by DeviceName asc, Timestamp asc
-| project DeviceName, Timestamp, FileName, ProcessCommandLine, InitiatingProcessFileName, AccountName
+| order by DeviceName asc, TimeGenerated asc
+| project DeviceName, TimeGenerated, FileName, ProcessCommandLine, InitiatingProcessFileName, AccountName
 ```
 
 **Evidence:**
@@ -309,110 +309,205 @@ Confirmation of egress is a necessity before any attempts to move data off-hose.
 ---
 
 ### 🚩 Flag 7: Interactive Session Discovery
+
 **Objective:**
+Reveal attempts to detect interactive or active user sessions on the host.
+
 **Flag Value:**
+`2533274790397065`
+`2025-10-09T12:51:44.3081129Z`
+
 **Detection Strategy:**
+In a previous query, the process "qwinsta.exe" was found to have enumerated the current session state or logged-in session of the host device. Using this knowledge, investigations for the unique ID of the initiating process can begin based off the command line process.
+
 **KQLQuery:**
 ```kql
+DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ("query user", "qwinsta", "net session", "Get-WmiObject Win32_LoggedOnUser", "Get-CimInstance Win32_ComputerSystem", "query session", "Get-WmiObject", "Get-CimInstance")
+| project TimeGenerated, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentId, InitiatingProcessUniqueId
+| order by TimeGenerated asc
 ```
+
 **Evidence:**
+<img width="2104" height="348" alt="image" src="https://github.com/user-attachments/assets/eb534628-b072-4470-8c3b-39e5e15a7e0f" />
+
 **Why This Matters:**
+Knowing which sessions are active helps an actor decide whether to act immediately or wait.
 
 ---
 
 ### 🚩 Flag 8: Runtime Application Inventory
+
 **Objective:**
+Detect the enumeration of running applications and services to inform risk and opportunity.
+
 **Flag Value:**
+`tasklist.exe`
+`2025-10-09T12:51:57.6866149Z`
+
 **Detection Strategy:**
+Hunting for events that capture broad processes, process-list snapshots, or qqueries of running services.
+
 **KQLQuery:**
 ```kql
+DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ("tasklist", "Get-Process", "Get-Service", "sc query", "wmic process list", "wmic service list")
+| project TimeGenerated, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentId, InitiatingProcessUniqueId
+| order by TimeGenerated asc
 ```
+
 **Evidence:**
+<img width="2101" height="356" alt="image" src="https://github.com/user-attachments/assets/bcf64b94-6433-4292-8b0a-1b712b853fb9" />
+
 **Why This Matters:**
+A process inventory shows what is present and what to avoid or target for collection. As an attacker, understanding what processes are running can simultaneously assist with highlighting valuable targets and processes to obfuscate behind.
 
 ---
 
 ### 🚩 Flag 9: Privilege Surface Check
+
 **Objective:**
+Detect attempts to understand privileges available to the current actor.
+
 **Flag Value:**
+`2025-10-09T12:52:14.3135459Z`
+
 **Detection Strategy:**
+Searching for any telemetry for any queries related to group memberships, token properties, or priviledge listings.
+
 **KQLQuery:**
 ```kql
+DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-01) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ("whoami", "net user", "net localgroup", "Get-LocalUser", "Get-LocalGroupMember")
+| project TimeGenerated, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentId, InitiatingProcessUniqueId
+| order by TimeGenerated asc
 ```
+
 **Evidence:**
+<img width="2088" height="362" alt="image" src="https://github.com/user-attachments/assets/79263ede-90c7-4be5-8b7b-b55df3338e26" />
+
 **Why This Matters:**
+Priviledge mapping informs whether the actor proceeds as a user or seeks evaluation.
 
 ---
 
 ### 🚩 Flag 10: Proof-of-Access & Egress Validation
+
 **Objective:**
+
 **Flag Value:**
+
 **Detection Strategy:**
+
 **KQLQuery:**
 ```kql
 ```
+
 **Evidence:**
+
 **Why This Matters:**
+
 
 ---
 
 ### 🚩 Flag 11: Bundling / Staging Artifacts
+
 **Objective:**
+
 **Flag Value:**
+
 **Detection Strategy:**
+
 **KQLQuery:**
 ```kql
 ```
+
 **Evidence:**
+
 **Why This Matters:**
+
 
 ---
 
 ### 🚩 Flag 12: Outbound Transfer Attempt (Simulated)
+
 **Objective:**
+
 **Flag Value:**
+
 **Detection Strategy:**
+
 **KQLQuery:**
 ```kql
 ```
+
 **Evidence:**
+
 **Why This Matters:**
+
 
 ---
 
 ### 🚩 Flag 13: Scheduled Re-Execution Persistence
+
 **Objective:**
+
 **Flag Value:**
+
 **Detection Strategy:**
+
 **KQLQuery:**
 ```kql
 ```
+
 **Evidence:**
+
 **Why This Matters:**
+
 
 ---
 
 ### 🚩 Flag 14: Autorun Fallback Persistence
+
 **Objective:**
+
 **Flag Value:**
+
 **Detection Strategy:**
+
 **KQLQuery:**
 ```kql
 ```
+
 **Evidence:**
+
 **Why This Matters:**
+
 
 ---
 
 ### 🚩 Flag 15: Planted Narrative / Cover Artifact
+
 **Objective:**
+
 **Flag Value:**
+
 **Detection Strategy:**
+
 **KQLQuery:**
 ```kql
 ```
+
 **Evidence:**
+
 **Why This Matters:**
+
 
 ---
 
