@@ -70,7 +70,7 @@ This report includes:
 
 ## 📔 Summary of Findings (Flags)
 
-| Flag | Objective Description | Finding | TimeStamp |
+| Flag | Objective | Finding | TimeStamp |
 |------|------------------------|---------|-----------|
 | 0 | Starting Point – Suspicious Processes Spawning in Downloads | `gab-intern-vm` was the first targeted machine | `2025-10-09T12:22:27.6514901Z` |
 | 1 | Initial Execution Detection | `-ExecutionPolicy` was the earliest anomalous execution | `2025-10-09T12:22:27.6514901Z` |
