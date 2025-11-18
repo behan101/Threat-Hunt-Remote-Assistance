@@ -83,7 +83,7 @@ This report includes:
 | 8 | Runtime Application Inventory | `tasklist.exe` was the filename of the runtime process enumeration event on the target host | `2025-10-09T12:51:57.6866149Z` |
 | 9 | Privilege Surface Check | The first use of CLI commands for discovery was at `2025-10-09T12:52:14.3135459Z` | `2025-10-09T12:52:14.3135459Z` |
 | 10 | Proof-of-Access & Egress Validation | `www.msftconnecttest.com` was the first suspicious outbound destination | `2025-10-09T12:55:15.736717Z` |
-| 11 | Bundling / Staging Artifacts |  |  |
+| 11 | Bundling / Staging Artifacts | Folder path value where the artifact was first dropped into: `C:\Users\Public\ReconArtifacts.zip` | `2025-10-09T12:59:05.6804726Z` |
 | 12 | Outbound Transfer Attempt (Simulated) |  |  |
 | 13 | Scheduled Re-Execution Persistence |  |  |
 | 14 | Autorun Fallback Persistence |  |  |
@@ -417,7 +417,7 @@ DeviceNetworkEvents
 | where DeviceName == VMName
 | where AdditionalFields has_all ("Out", "host")
 | project TimeGenerated, ActionType, AdditionalFields, InitiatingProcessAccountName, InitiatingProcessCommandLine, InitiatingProcessFolderPath,LocalIPType, RemoteIP, Timestamp
-| order by Timestamp asc
+| order by TimeGenerated asc
 ```
 
 **Evidence:**
@@ -431,19 +431,31 @@ The outbound destination `www.msftconnecttest.com` was contacted first. This ste
 ### 🚩 Flag 11: Bundling / Staging Artifacts
 
 **Objective:**
+Detect consolidation of artifacts into a single location or package for transfer.
 
 **Flag Value:**
+`C:\Users\Public\ReconArtifacts.zip`
+`2025-10-09T12:59:05.6804726Z`
 
 **Detection Strategy:**
+Search for file system events or operations that show grouping, consolidation, or packaging of gathered items.
 
 **KQLQuery:**
 ```kql
+let VMName = "gab-intern-vm";
+DeviceFileEvents
+| where TimeGenerated between (datetime(2025-10-09T12:22:27.6514901Z) .. datetime(2025-10-15))
+| where DeviceName == VMName
+| where FileName endswith ".zip"
+| project TimeGenerated, ActionType, FileName, FileSize, FolderPath, InitiatingProcessCommandLine, InitiatingProcessFileName, InitiatingProcessFolderPath,InitiatingProcessParentFileName,PreviousFileName
+| order by TimeGenerated asc
 ```
 
 **Evidence:**
+<img width="1348" height="314" alt="image" src="https://github.com/user-attachments/assets/46693303-02b5-45eb-b196-0dfb41699aca" />
 
 **Why This Matters:**
-
+Staging is the practical step that simplifies exfiltration and should be correlated back to prior recon.
 
 ---
 
