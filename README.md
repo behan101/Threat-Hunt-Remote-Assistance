@@ -103,10 +103,10 @@ and other traits.
 
 **Flag Value:**
 `gab-intern-vm`
-2025-10-09T12:22:27.6514901Z
+`2025-10-09T12:22:27.6514901Z`
 
 **Detection Strategy:**
-Multiple alerts were issued indicating that multiple machines were spawning processes originating from the 'download' folders around the first half of October (10/01/2025 - 10/15/2025). Common keywords among the discovered files included "desk", "help", "support", and "tool". The following query was used in Microsoft Defender to find any files associated with the keywords:
+Multiple alerts were issued indicating that multiple machines were spawning processes originating from the "downloads" folders around the first half of October (10/01/2025 - 10/15/2025). Common keywords among the discovered files included "desk", "help", "support", and "tool". The following query was used in Microsoft Defender to find any files associated with the keywords:
 
 **KQLQuery:**
 ```kql
@@ -136,10 +136,10 @@ Detect the earliest anomalous execution that could represent an entry point.
 
 **Flag Value:**
 `-ExecutionPolicy`
-2025-10-09T12:22:27.6514901Z
+`2025-10-09T12:22:27.6514901Z`
 
 **Detection Strategy:**
-In order to find the earliest anomalous execution, the query needed to be fine-tuned to look for suspicious Command Line Interface (CLI) parameters. The suspicious file was created at '2025-10-09T12:22:27.6514901Z' and named 'SupportTool.ps1'. Using this time frame to narrow down results, the DeviceProcessEvents query can be adjusted accordingly.
+In order to find the earliest anomalous execution, the query needed to be fine-tuned to look for suspicious Command Line Interface (CLI) parameters. The suspicious file was created at `2025-10-09T12:22:27.6514901Z` and named "SupportTool.ps1". Using this time frame to narrow down results, the DeviceProcessEvents query can be adjusted accordingly.
 
 **KQLQuery:**
 
@@ -167,10 +167,10 @@ Identify indicators that suggest attempts to imply or simulate changing security
 
 **Flag Value:**
 `DefenderTamperArtifact.lnk`
-2025-10-09T12:34:59.1260624Z
+`2025-10-09T12:34:59.1260624Z`
 
 **Detection Strategy:**
-The previous results gave a timeframe of when the initial process was executed. Knowing that the possibility of any indications of attempts or changes to the security postue would be present after the timeframe of '2025-10-09T12:22:27.6514901Z, the query was adjusted to after the known initial process. Any file creation, modifications, or copies would be scrutinized for any alarming behaviors.
+The previous results gave a timeframe of when the initial process was executed. Knowing that the possibility of any indications of attempts or changes to the security postue would be present after the timeframe of `2025-10-09T12:22:27.6514901Z`, the query was adjusted to after the known initial process. Any file creation, modifications, or copies would be scrutinized for any alarming behaviors.
 
 **KQLQuery:**
 
@@ -197,7 +197,7 @@ Spot brief, opportunistic checks for readily available sensitive content.
 
 **Flag Value:**
 `"powershell.exe" -NoProfile -Sta -Command "try { Get-Clipboard | Out-Null } catch { }"`
-2025-10-09T12:50:39.955931Z
+`2025-10-09T12:50:39.955931Z`
 
 **Detection Strategy:**
 Attackers often look for low effort wins first. Quick probes such as these can often precede broader reconnaissance. Adjustments should be made to search for transient data such as anything related to "clip" or "clipboard".
@@ -254,7 +254,7 @@ Detect discovery of local or network storage locations that might hold interesti
 
 **Flag Value:**
 `"cmd.exe" /c wmic logicaldisk get name,freespace,size`
-2025-10-09T12:51:18.3848072Z
+`2025-10-09T12:51:18.3848072Z`
 
 **Detection Strategy:**
 Any enumeration of filesystem, share surfaces, and lightweight checks of available storaged would indicate attempts for storage surface mapping. Searching for any ProcessCommandLine and quick "read-only" commands such as "net view", "dir", "Get-PSDrive", "wmic logicaldisk" with connections to network share queries like "net view \\HOST” or “Get-SmbShare" would show explicit network share discovery.
