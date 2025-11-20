@@ -537,7 +537,7 @@ Detect registry or startup-area modifications that reference familiar execution 
 
 **Evidence:**
 `RemoteAssistUpdater`
-``
+
 
 **Why This Matters:**
 Redundant persistence increases resilience. Finding the fallback to prevent easy re-entry help reduce the possibility of future compromise.
