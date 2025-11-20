@@ -576,24 +576,24 @@ A planted explanation is a classic misdirection. The sequence and context reveal
 
 ## 🎯 MITRE ATT&CK Technique Mapping
 
-| Flag | MITRE Technique                    | ID                                                          | Description                                                             |
-| ---- | ---------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
-| 0    |                                    |                                                             |                                                                         |
-| 1    |                                    |                                                             |                                                                         |
-| 2    |                                    |                                                             |                                                                         |
-| 3    |                                    |                                                             |                                                                         |
-| 4    |                                    |                                                             |                                                                         |
-| 5    |                                    |                                                             |                                                                         |
-| 6    |                                    |                                                             |                                                                         |
-| 7    |                                    |                                                             |                                                                         |
-| 8    |                                    |                                                             |                                                                         |
-| 9    |                                    |                                                             |                                                                         |
-| 10   |                                    |                                                             |                                                                         |
-| 11   |                                    |                                                             |                                                                         |
-| 12   |                                    |                                                             |                                                                         |
-| 13   |                                    |                                                             |                                                                         |
-| 14   |                                    |                                                             |                                                                         |
-| 15   |                                    |                                                             |                                                                         |
+| Flag | Description | MITRE ATT&CK Technique(s) |
+|------|-------------|---------------------------|
+| **0** | Initial execution from Downloads (SupportTool.ps1) | T1059.001 PowerShell, T1204.002 User Execution, T1036 Masquerading |
+| **1** | Defense tamper attempt / staged tamper artifact | T1562.001 Impair Defenses, T1036 Masquerading |
+| **2** | Quick data probe (clipboard check) | T1115 Clipboard Data |
+| **3** | Host & user context recon | T1082 System Information Discovery, T1033 User Discovery |
+| **4** | Storage surface mapping | T1083 File and Directory Discovery, T1135 Network Share Discovery |
+| **5** | Connectivity & DNS resolution checks | T1046 Network Service Scanning, T1018 Remote System Discovery, T1071.001 Web Protocol |
+| **6** | Interactive session discovery | T1087 Account Discovery, T1033 User Discovery, T1057 Process Discovery |
+| **7** | Runtime process inventory | T1057 Process Discovery, T1007 System Service Discovery |
+| **8** | Privilege surface check (whoami / groups) | T1069 Permission Groups Discovery, T1033 User Discovery |
+| **9** | Proof-of-access + egress validation (outbound + screenshot) | T1113 Screen Capture, T1071.001 Web Protocol |
+| **10** | Data staging (ZIP archive) | T1560.001 Archive Collected Data, T1074 Data Staged |
+| **11** | Outbound exfiltration test | T1041 Exfil Over C2 Channel, T1567 Exfil to Cloud Storage, T1071.001 Web Protocol |
+| **12** | Scheduled task persistence | T1053.005 Scheduled Task / Job |
+| **13** | Autorun registry fallback persistence | T1547.001 Registry Run Keys / Startup Folder |
+| **14** | Planted narrative / cover artifact (fake logs) | T1036 Masquerading, T1553 Subvert Trust Controls, T1204 User Execution |
+| **15** | Final deception artifact (SupportChat_log.lnk) | T1036 Masquerading, T1204.002 User Execution (shortcut), T1553 Subvert Trust Controls |
 
 ---
 
@@ -676,4 +676,102 @@ Lesson: Threat hunting must look at timelines, not isolated events.
 
 ## 🛠️ Recommendations for Remediation
 
+### 🔒 1. Endpoint Containment
+Goal: stop all attacker activity immediately.
 
+Isolate the affected device using EDR or NAC quarantine.
+Terminate suspicious PowerShell and command-line processes.
+Block outbound connections associated with known indicators (domains, IPs, ports).
+
+### 🧹 2. Remove Persistence Mechanisms
+a. Scheduled Tasks
+
+Review tasks created during the incident timeframe.
+Remove any unauthorized or suspicious scheduled tasks.
+Validate the referenced script or executable no longer exists.
+
+b. Registry Run Keys
+
+Inspect and clean:
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+
+Remove entries linked to SupportTool.ps1 or other unknown scripts.
+
+### 🗑️ 3. Delete Malicious Files
+
+Remove all artifacts related to staging or persistence:
+SupportTool.ps1
+Any ZIP archive created for data staging
+Fake “support logs” or deceptive chat transcripts
+SupportChat_log.lnk (if not legitimate)
+
+Use EDR to search by:
+File hashes
+File paths (Downloads, Temp, Recent Items)
+
+### 🔐 4. Credential Reset & Hardening
+
+Since recon included identity and session enumeration:
+Reset passwords for the affected user and any accounts active during compromise.
+Revoke sign-in refresh tokens.
+Enforce MFA for all accounts.
+
+### 🌐 5. Network Hardening
+
+Strengthen outbound restrictions:
+Apply strict egress filtering (limit outbound ports/domains).
+Enforce proxy usage; block direct-to-internet traffic.
+Enable DNS logging and threat-intel filtering.
+Detect/block suspicious PowerShell-based HTTP requests.
+
+### 📊 6. Improve Logging & Monitoring
+
+PowerShell Logging
+Enable Script Block Logging
+Enable Module Logging
+Enforce Constrained Language Mode for non-admins
+OS Logging
+
+Enable:
+Process creation logging (4688)
+Command-line parameters
+Registry modification auditing
+Task Scheduler operational logs
+
+### 🛡️ 7. Hardening of Security Controls
+
+Enforce least privilege (remove unnecessary local admin rights).
+Apply tamper protection for Defender/EDR.
+Restrict PowerShell usage to approved roles.
+Deploy WDAC or AppLocker allowlisting policies.
+
+### 👥 8. User Awareness & Policy Improvements
+
+Because execution originated from Downloads:
+Train users to avoid running unsolicited “support” scripts or tools.
+Enforce signed/verified IT tools only.
+Improve helpdesk procedures to prevent social engineering.
+
+### 🕵️ 9. Lateral Movement Validation
+
+Check for additional compromise indicators:
+Review SMB, RDP, and remote execution logs.
+Look for unauthorized local admin account creation.
+Correlate abnormal logon events across the domain.
+
+### 🧭 10. Enterprise-Wide Sweep
+
+Search the environment for:
+Copies of malicious scripts
+Scheduled tasks matching the compromises
+Identical registry persistence keys
+Suspicious outbound HTTP attempts
+Treat any secondary device as compromised.
+
+### 📘 11. Post-Incident Improvements
+
+Update incident response playbooks.
+Add detection logic for the ATT&CK techniques used.
+Patch the affected machine fully.
+Document IoCs and incorporate them into threat hunts.
