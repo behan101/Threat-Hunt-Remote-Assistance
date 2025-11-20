@@ -625,7 +625,6 @@ Lesson: Any tool claiming to be support-related should be treated with suspicion
 The first malicious action occurred when a script in the Downloads directory was executed.
 
 Lesson: Enforce stricter controls around script execution from user-writable paths.
-
 Baseline expected user behavior: most users do not run PowerShell scripts manually.
 
 ### 3. Defense Probing Occurs Before Any Real Damage
