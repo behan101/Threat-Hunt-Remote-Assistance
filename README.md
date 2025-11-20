@@ -614,13 +614,13 @@ Taken together, the chain illustrates a disciplined adversary moving from initia
 
 ## 🎓 Lessons Learned
 
-1. Social Engineering Can Masquerade as IT Support
+### 1. Social Engineering Can Masquerade as IT Support
 
 The attacker relied heavily on legitimacy mimicry — naming files “SupportTool.ps1,” placing fake “helpdesk logs,” and generating shortcuts that appeared in Recent Items.
 
 Lesson: Any tool claiming to be support-related should be treated with suspicion unless verified through a trusted deployment channel.
 
-2. Early Indicators Are Often Small and Easily Missed
+### 2. Early Indicators Are Often Small and Easily Missed
 
 The first malicious action occurred when a script in the Downloads directory was executed.
 
@@ -628,13 +628,13 @@ Lesson: Enforce stricter controls around script execution from user-writable pat
 
 Baseline expected user behavior: most users do not run PowerShell scripts manually.
 
-3. Defense Probing Occurs Before Any Real Damage
+### 3. Defense Probing Occurs Before Any Real Damage
 
 The adversary tested Defender visibility, attempted tamper simulation, and checked what data was easily reachable (clipboard, session, environment).
 
 Lesson: Monitoring for attempted tampering or reconnaissance is as important as detecting the tampering itself.
 
-4. Reconnaissance Was Systematic and Multi-Layered
+### 4. Reconnaissance Was Systematic and Multi-Layered
 
 The attacker moved through:
 
@@ -647,13 +647,13 @@ Privilege checks
 
 Lesson: Establish alerting for sequences or clusters of recon activity, not just individual events.
 
-5. Staging & Exfiltration Tests Occur Before the Real Theft
+### 5. Staging & Exfiltration Tests Occur Before the Real Theft
 
 The operator created archives, tested HTTP outbound paths, and took screenshots.
 
 Lesson: Outbound egress tests from unfamiliar processes should be treated as high-risk signals.
 
-6. Persistence Was Redundant
+### 6. Persistence Was Redundant
 
 They created:
 Scheduled task persistence
@@ -661,13 +661,13 @@ Run key registry fallback persistence
 
 Lesson: Defense must identify persistence families, not just individual techniques.
 
-7. “Narrative Files” Are an Emerging Tactic
+### 7. “Narrative Files” Are an Emerging Tactic
 
 The final step was dropping a helpdesk-themed artifact meant to explain away unusual logs.
 
 Lesson: Analysts must consider that some files may be intentionally planted to mislead investigations.
 
-8. Sequencing Tells a Story
+### 8. Sequencing Tells a Story
 
 The true detection strength came from seeing how each step connected logically into the next.
 
