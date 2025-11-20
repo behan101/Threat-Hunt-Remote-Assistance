@@ -85,7 +85,7 @@ This report includes:
 | 10 | Proof-of-Access & Egress Validation | `www.msftconnecttest.com` was the first suspicious outbound destination | `2025-10-09T12:55:15.736717Z` |
 | 11 | Bundling / Staging Artifacts | Folder path value where the artifact was first dropped into: `C:\Users\Public\ReconArtifacts.zip` | `2025-10-09T12:59:05.6804726Z` |
 | 12 | Outbound Transfer Attempt (Simulated) | Last unusual outbound connection: `100.29.147.161` | `2025-10-09T13:00:40.7259181Z` |
-| 13 | Scheduled Re-Execution Persistence |  |  |
+| 13 | Scheduled Re-Execution Persistence | `SupportToolUpdater` | `2025-10-09T13:01:28.7700443Z` |
 | 14 | Autorun Fallback Persistence |  |  |
 | 15 | Planted Narrative / Cover Artifact |  |  |
 
@@ -494,19 +494,30 @@ Any outbound transfer attempts, regardless of sucess or failure, are clear indic
 ### 🚩 Flag 13: Scheduled Re-Execution Persistence
 
 **Objective:**
+Detect creation of mechanisms that ensure the actor’s tooling runs again on reuse or sign-in.
 
 **Flag Value:**
+`SupportToolUpdater`
+`2025-10-09T13:01:28.7700443Z`
 
 **Detection Strategy:**
+Process or scheduler-related events that create recurring or logon-triggered executions tied to the same actor pattern.
 
 **KQLQuery:**
 ```kql
+let VMName = "gab-intern-vm";
+DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-10-9) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ("schtasks", "Register-ScheduledTask", "New-ScheduledTaskTrigger", "Set-ScheduledTask", "Unregister-ScheduledTask")
+| sort by TimeGenerated asc
 ```
 
 **Evidence:**
+<img width="2082" height="587" alt="image" src="https://github.com/user-attachments/assets/c4aa3efc-c10c-43d1-bd06-3fb4b4db556d" />
 
 **Why This Matters:**
-
+Re-execution mechanisms are the actor’s way of surviving beyond a single session — interrupting them reduces risk.
 
 ---
 
