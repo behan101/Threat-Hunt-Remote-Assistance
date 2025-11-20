@@ -85,7 +85,7 @@ This report includes:
 | 10 | Proof-of-Access & Egress Validation | `www.msftconnecttest.com` was the first suspicious outbound destination | `2025-10-09T12:55:15.736717Z` |
 | 11 | Bundling / Staging Artifacts | Folder path value where the artifact was first dropped into: `C:\Users\Public\ReconArtifacts.zip` | `2025-10-09T12:59:05.6804726Z` |
 | 12 | Outbound Transfer Attempt (Simulated) | Last unusual outbound connection: `100.29.147.161` | `2025-10-09T13:00:40.7259181Z` |
-| 13 | Scheduled Re-Execution Persistence | `SupportToolUpdater` | `2025-10-09T13:01:28.7700443Z` |
+| 13 | Scheduled Re-Execution Persistence | Creation of task `SupportToolUpdater` was found to be associated with scheduled re-execution | `2025-10-09T13:01:28.7700443Z` |
 | 14 | Autorun Fallback Persistence |  |  |
 | 15 | Planted Narrative / Cover Artifact |  |  |
 
