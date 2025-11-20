@@ -84,7 +84,7 @@ This report includes:
 | 9 | Privilege Surface Check | The first use of CLI commands for discovery was at `2025-10-09T12:52:14.3135459Z` | `2025-10-09T12:52:14.3135459Z` |
 | 10 | Proof-of-Access & Egress Validation | `www.msftconnecttest.com` was the first suspicious outbound destination | `2025-10-09T12:55:15.736717Z` |
 | 11 | Bundling / Staging Artifacts | Folder path value where the artifact was first dropped into: `C:\Users\Public\ReconArtifacts.zip` | `2025-10-09T12:59:05.6804726Z` |
-| 12 | Outbound Transfer Attempt (Simulated) |  |  |
+| 12 | Outbound Transfer Attempt (Simulated) | Last unusual outbound connection: `100.29.147.161` | `2025-10-09T13:00:40.7259181Z` |
 | 13 | Scheduled Re-Execution Persistence |  |  |
 | 14 | Autorun Fallback Persistence |  |  |
 | 15 | Planted Narrative / Cover Artifact |  |  |
@@ -462,19 +462,32 @@ Staging is the practical step that simplifies exfiltration and should be correla
 ### 🚩 Flag 12: Outbound Transfer Attempt (Simulated)
 
 **Objective:**
+Identify attempts to move data off-host or test upload capability.
 
 **Flag Value:**
+`100.29.147.161`
+`2025-10-09T13:00:40.7259181Z`
 
 **Detection Strategy:**
+Investigate network events or process activity indicating outbound transfers or upload attempts, even if they fail.
 
 **KQLQuery:**
 ```kql
+let VMName = "gab-intern-vm";
+DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-10-09T12:22:27.6514901Z) .. datetime(2025-10-10))
+| where DeviceName == VMName
+| where AdditionalFields has_any ("Out")
+| where ActionType contains "SslConnectionInspected"
+| project TimeGenerated, RemoteIP, ActionType, AdditionalFields, InitiatingProcessAccountName, InitiatingProcessCommandLine, InitiatingProcessFolderPath
+| order by RemoteIP asc
 ```
 
 **Evidence:**
+<img width="2082" height="586" alt="image" src="https://github.com/user-attachments/assets/7b30d32a-455d-4453-bb6d-dab70e071231" />
 
 **Why This Matters:**
-
+Any outbound transfer attempts, regardless of sucess or failure, are clear indications of intent of egress and exfiltration.
 
 ---
 
