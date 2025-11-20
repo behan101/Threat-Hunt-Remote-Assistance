@@ -693,8 +693,8 @@ Validate the referenced script or executable no longer exists.
 b. Registry Run Keys
 
 Inspect and clean:
-HKCU\Software\Microsoft\Windows\CurrentVersion\Run
-HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`
+`HKLM\Software\Microsoft\Windows\CurrentVersion\Run`
 
 Remove entries linked to SupportTool.ps1 or other unknown scripts.
 
