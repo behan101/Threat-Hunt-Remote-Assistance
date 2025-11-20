@@ -86,8 +86,8 @@ This report includes:
 | 11 | Bundling / Staging Artifacts | Folder path value where the artifact was first dropped into: `C:\Users\Public\ReconArtifacts.zip` | `2025-10-09T12:59:05.6804726Z` |
 | 12 | Outbound Transfer Attempt (Simulated) | Last unusual outbound connection: `100.29.147.161` | `2025-10-09T13:00:40.7259181Z` |
 | 13 | Scheduled Re-Execution Persistence | Creation of task `SupportToolUpdater` was found to be associated with scheduled re-execution | `2025-10-09T13:01:28.7700443Z` |
-| 14 | Autorun Fallback Persistence |  |  |
-| 15 | Planted Narrative / Cover Artifact |  |  |
+| 14 | Autorun Fallback Persistence | `RemoteAssistUpdater` was the name of the registry value |  |
+| 15 | Planted Narrative / Cover Artifact | `SupportChat_log.lnk` was the artifact left behind | `2025-10-09T13:02:41.5698148Z` |
 
 ---
 ### 🚩 Flag 0: Starting Point - Suspicious Processes Spawning in Downloads
@@ -524,38 +524,53 @@ Re-execution mechanisms are the actor’s way of surviving beyond a single sessi
 ### 🚩 Flag 14: Autorun Fallback Persistence
 
 **Objective:**
+Spot lightweight autorun entries placed as backup persistence in user scope.
 
 **Flag Value:**
 
 **Detection Strategy:**
+Detect registry or startup-area modifications that reference familiar execution patterns or repeat previously observed commands.
 
 **KQLQuery:**
 ```kql
 ```
 
 **Evidence:**
+`RemoteAssistUpdater`
+``
 
 **Why This Matters:**
-
+Redundant persistence increases resilience. Finding the fallback to prevent easy re-entry help reduce the possibility of future compromise.
 
 ---
 
 ### 🚩 Flag 15: Planted Narrative / Cover Artifact
 
 **Objective:**
+Identify a narrative or explanatory artifact intended to justify the activity.
 
 **Flag Value:**
+`SupportChat_log.lnk`
+`2025-10-09T13:02:41.5698148Z`
 
 **Detection Strategy:**
+Creation of explanatory files or user-facing artifacts near the time of suspicious operations; focus on timing and correlation rather than contents.
 
 **KQLQuery:**
 ```kql
+DeviceFileEvents
+| where TimeGenerated between (datetime(2025-10-09T12:22:27.6514901Z) .. datetime(2025-10-10))
+| where DeviceName == "gab-intern-vm"
+| where ActionType in ("FileCreated","FileModified","FileCopied")
+| project TimeGenerated, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc
 ```
 
 **Evidence:**
+<img width="1524" height="313" alt="image" src="https://github.com/user-attachments/assets/e3b43855-ebf0-4319-9478-78dd9b99b8d5" />
 
 **Why This Matters:**
-
+A planted explanation is a classic misdirection. The sequence and context reveal deception more than the text itself. The file `SupportChat_log.lnk` was opened after the mass created fake files.
 
 ---
 
