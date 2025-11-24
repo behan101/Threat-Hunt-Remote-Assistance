@@ -304,7 +304,7 @@ DeviceProcessEvents, DeviceNetworkEvents
 <img width="1858" height="321" alt="image" src="https://github.com/user-attachments/assets/d5f40d59-3753-4a08-9c81-974c8939d5b6" />
 
 **Why This Matters:**
-Confirmation of egress is a necessity before any attempts to move data off-hose. After establishing a connection, exfiltrated data can be transferred. "RuntimeBroker.exe" was found to to be the initiating parent process for the queries.
+Confirmation of egress is a necessity before any attempts to move data off-host. After establishing a connection, exfiltrated data can be transferred. "RuntimeBroker.exe" was found to to be the initiating parent process for the queries.
 
 ---
 
