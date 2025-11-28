@@ -505,11 +505,10 @@ Process or scheduler-related events that create recurring or logon-triggered exe
 
 **KQLQuery:**
 ```kql
-let VMName = "gab-intern-vm";
 DeviceProcessEvents
 | where TimeGenerated between (datetime(2025-10-9) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine has_any ("schtasks", "Register-ScheduledTask", "New-ScheduledTaskTrigger", "Set-ScheduledTask", "Unregister-ScheduledTask")
+| where RegistryValueData has_any ("Remote")
 | sort by TimeGenerated asc
 ```
 
@@ -527,17 +526,23 @@ Re-execution mechanisms are the actor’s way of surviving beyond a single sessi
 Spot lightweight autorun entries placed as backup persistence in user scope.
 
 **Flag Value:**
+`RemoteAssistUpdater`
 
 **Detection Strategy:**
 Detect registry or startup-area modifications that reference familiar execution patterns or repeat previously observed commands.
 
 **KQLQuery:**
 ```kql
+let VMName = "gab-intern-vm";
+DeviceRegistryEvents
+| where TimeGenerated between (datetime(2025-10-9) .. datetime(2025-10-15))
+| where DeviceName == "gab-intern-vm"
+| where ProcessCommandLine has_any ("schtasks", "Register-ScheduledTask", "New-ScheduledTaskTrigger", "Set-ScheduledTask", "Unregister-ScheduledTask")
+| sort by TimeGenerated asc
 ```
 
 **Evidence:**
-`RemoteAssistUpdater`
-
+<img width="1840" height="214" alt="image" src="https://github.com/user-attachments/assets/2dddb962-a166-401a-833e-6bd867886df5" />
 
 **Why This Matters:**
 Redundant persistence increases resilience. Finding the fallback to prevent easy re-entry help reduce the possibility of future compromise.
