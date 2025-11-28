@@ -506,10 +506,10 @@ Process or scheduler-related events that create recurring or logon-triggered exe
 **KQLQuery:**
 ```kql
 DeviceProcessEvents
-| where TimeGenerated between (datetime(2025-10-9) .. datetime(2025-10-15))
+| where Timestamp between (datetime(2025-10-9) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where RegistryValueData has_any ("Remote")
-| sort by TimeGenerated asc
+| where ProcessCommandLine has_any ("schtasks", "Register-ScheduledTask", "New-ScheduledTaskTrigger", "Set-ScheduledTask", "Unregister-ScheduledTask")
+| sort by Timestamp asc
 ```
 
 **Evidence:**
@@ -533,11 +533,10 @@ Detect registry or startup-area modifications that reference familiar execution 
 
 **KQLQuery:**
 ```kql
-let VMName = "gab-intern-vm";
-DeviceRegistryEvents
+DeviceProcessEvents
 | where TimeGenerated between (datetime(2025-10-9) .. datetime(2025-10-15))
 | where DeviceName == "gab-intern-vm"
-| where ProcessCommandLine has_any ("schtasks", "Register-ScheduledTask", "New-ScheduledTaskTrigger", "Set-ScheduledTask", "Unregister-ScheduledTask")
+| where RegistryValueData has_any ("Remote")
 | sort by TimeGenerated asc
 ```
 
